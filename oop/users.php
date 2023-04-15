@@ -1,5 +1,21 @@
 <?php
-class User
+
+abstract class UserAbstract
+{
+    function showInfo() {
+        echo "<p>Пользователя зовут ".$this->name."\n";
+        echo "<p>Login: $this->login\n";
+        echo "<p> Pass: $this->password\n";
+        echo "<hr>";
+    }
+}
+
+interface ISuperUser
+{
+    function getInfo();
+}
+
+class User extends UserAbstract
 {
     public $name;
     public $login;
@@ -10,31 +26,28 @@ class User
         $this->login = $login;
         $this->password = $password;
     }
-
-    function showInfo() {
-        echo "<p>Пользователя зовут ".$this->name."\n";
-        echo "<p>Login: $this->login\n";
-        echo "<p> Pass: $this->password\n";
-        $this->drawLine();
-    }
-    function drawLine() {
-        echo "<hr>";
-    }
+    
 }
 
-class SuperUser extends User
+class SuperUser implements ISuperUser
 {
     public $role;
-    
+    public $name;
+    public $login;
+    public $password;
     function __construct($name, $login, $password, $role) {
-        parent::__construct($name, $login, $password);
         $this->role = $role;
+        $this->name = $name;
+        $this->login = $login;
+        $this->password = $password;
     }
-    function showInfo() {
-        echo "<p>Роль: ".$this->role."\n";
-        parent::showInfo();
+    function getInfo() {
+        $info ['role'] = $this->role;
+        $info ['name'] = $this->name;
+        $info ['login'] = $this->login;
+        $info ['password'] = $this->password;
+        return $info;
     }
-
 }
 
 $user1 = new User("Ivan", "ivanb", "1234");
@@ -45,4 +58,4 @@ $user = new Superuser("Admin", "admin", "pass", "admin");
 $user1->showInfo();
 $user2->showInfo();
 $user3->showInfo();
-$user->showinfo();
+print_r($user->getinfo());

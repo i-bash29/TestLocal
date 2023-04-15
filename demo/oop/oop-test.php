@@ -1,5 +1,19 @@
 <?php
-class User
+
+abstract class UserAbstract
+{
+    function showInfo() {
+        echo "<p>Пользователя зовут ".$this->name."\n";
+        echo "<p>Login: $this->login\n";
+        echo "<p> Pass: $this->password\n";
+        $this->drawLine();
+    }
+    function drawLine() {
+        echo "<hr>";
+    }
+}
+
+class User extends UserAbstract
 {
     public $name;
     public $login;
@@ -10,16 +24,7 @@ class User
         $this->login = $login;
         $this->password = $password;
     }
-
-    function showInfo() {
-        echo "<p>Пользователя зовут ".$this->name."\n";
-        echo "<p>Login: $this->login\n";
-        echo "<p> Pass: $this->password\n";
-        $this->drawLine();
-    }
-    function drawLine() {
-        echo "<hr>";
-    }
+    
 }
 
 class SuperUser extends User
