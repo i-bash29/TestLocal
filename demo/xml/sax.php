@@ -1,11 +1,29 @@
 <?php 
   header( "Content-Type: text/html;charset=utf-8"); 
   // Создание парсера 
-  // Функция обработчик начальных тегов 
-  // Функция обработчик закрывающих тегов 
-  // Функция обработчик текстового содержимого 
-  // Назначение обработчиков начальных и конечных тегов 
-  // Назначение обработчика текстового содержимого 
+  $sax = xml_parser_create("utf-8");
+  // Функция обработчик начальных тегов
+  function onStart($parser, $tag, $attributes){
+    if ($tag != "CATALOG" and $tag != "BOOK")
+        echo "<td>";
+    if ($tag == "BOOK")
+        echo "<tr>";
+  }
+  // Функция обработчик закрывающих тегов
+  function onEnd($parser, $tag){
+    if ($tag != "CATALOG" and $tag != "BOOK")
+        echo "</td>";
+    if ($tag == "BOOK")
+        echo "</tr>";
+  }
+  // Функция обработчик текстового содержимого
+  function onText($parser, $text){
+    echo $text;
+  }
+  // Назначение обработчиков начальных и конечных тегов
+  xml_set_element_handler($sax, "onStart", "onEnd");
+  // Назначение обработчика текстового содержимого
+  xml_set_character_data_handler($sax, "onText");
 ?>
 <html>
 
@@ -23,7 +41,8 @@
       <th>Цена, руб</th>
     </tr>
     <?php
-      //Парсинг 
+      //Парсинг
+      xml_parse($sax, file_get_contents("catalog.xml"));
     ?>
   </table>
 </body>
